@@ -1,6 +1,5 @@
 import datetime
 import os
-import random
 from typing import Tuple
 
 
@@ -31,24 +30,33 @@ class FilenameGenerator:
         return {
             "required": {
                 # 注意：这里只定义参数格式，不解析时间，默认值改为纯提示文本
-                "prefix": ("STRING", {
-                    "default": "%Y%m%d_%H%M%S",
-                    "multiline": False,
-                    "placeholder": "时间格式掩码/固定字符串，如%Y%m%d、img_prefix等"
-                }),
-                "suffix": ("STRING", {
-                    "default": "",
-                    "multiline": False,
-                    "placeholder": "固定字符串/时间掩码，如test、%H%M%S等"
-                })
+                "prefix": (
+                    "STRING",
+                    {
+                        "default": "%Y%m%d_%H%M%S",
+                        "multiline": False,
+                        "placeholder": "时间格式掩码/固定字符串，如%Y%m%d、img_prefix等",
+                    },
+                ),
+                "suffix": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "placeholder": "固定字符串/时间掩码，如test、%H%M%S等",
+                    },
+                ),
             },
             "optional": {
-                "save_directory": ("STRING", {
-                    "default": "%Y-%m-%d",
-                    "multiline": False,
-                    "placeholder": "保存目录（支持时间掩码，如%Y%m%d、test_dir）"
-                })
-            }
+                "save_directory": (
+                    "STRING",
+                    {
+                        "default": "%Y-%m-%d",
+                        "multiline": False,
+                        "placeholder": "保存目录（支持时间掩码，如%Y%m%d、test_dir）",
+                    },
+                )
+            },
         }
 
     def _format_with_current_time(self, input_str: str) -> str:
@@ -74,7 +82,7 @@ class FilenameGenerator:
         """
         核心功能：
         1. 解析prefix/suffix/save_directory（都支持时间掩码）
-        2. 拼接为 [目录\]前缀_后缀 格式的文件名
+        2. 拼接为 [目录\\]前缀_后缀 格式的文件名
         3. 每次执行都使用最新的系统时间
         """
         try:
@@ -89,7 +97,7 @@ class FilenameGenerator:
                 file_parts.append(parsed_prefix)
             if parsed_suffix:
                 file_parts.append(parsed_suffix)
-            file_name = '_'.join(file_parts)
+            file_name = "_".join(file_parts)
 
             # 处理保存目录（同样每次都重新解析）
             if save_directory:
@@ -107,10 +115,11 @@ class FilenameGenerator:
 
 # ComfyUI节点注册（必须）
 NODE_CLASS_MAPPINGS = {
-    "FilenameGeneratorNode": FilenameGenerator
+    "FilenameGeneratorNode": FilenameGenerator,
 }
 
 # 节点在界面上显示的名称
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "FilenameGeneratorNode": "NNKK:FilenameGenerator"
+    "FilenameGeneratorNode": "NNKK:FilenameGenerator",
 }
+

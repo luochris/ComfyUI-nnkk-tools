@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from PIL import Image
 
+
 # 缓存目录配置
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache_text")
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -22,11 +23,14 @@ class LoadImagePrompt:
         return {
             "required": {
                 "image": ("IMAGE",),  # ComfyUI 原生图片输入（Tensor）
-                "skip_load": ("BOOLEAN", {  # 新增：是否忽略读取的布尔参数
-                    "default": False,  # 默认不忽略（正常读取）
-                    "label_on": "skip_load",
-                    "label_off": "normal_load"
-                }),
+                "skip_load": (
+                    "BOOLEAN",  # 新增：是否忽略读取的布尔参数
+                    {
+                        "default": False,  # 默认不忽略（正常读取）
+                        "label_on": "skip_load",
+                        "label_off": "normal_load",
+                    },
+                ),
             },
         }
 
@@ -95,7 +99,7 @@ class LoadImagePrompt:
             # 3. 计算MD5（直接基于numpy数组字节，跳过PIL转换）
             md5_hash = hashlib.md5()
             # 强制按C顺序读取字节（避免不同系统/版本的字节序问题）
-            md5_hash.update(image_np.tobytes(order='C'))
+            md5_hash.update(image_np.tobytes(order="C"))
             return md5_hash.hexdigest()
         except Exception as e:
             print(f"计算图片MD5失败: {e}")
@@ -111,16 +115,22 @@ class SaveImagePrompt:
         return {
             "optional": {  # 改为optional，让两个参数都可选
                 "image": ("IMAGE",),  # 可选：图片（用于计算MD5）
-                "cache_key": ("STRING", {  # 可选：手动输入的缓存键
-                    "default": "",
-                    "multiline": False
-                }),
+                "cache_key": (
+                    "STRING",  # 可选：手动输入的缓存键
+                    {
+                        "default": "",
+                        "multiline": False,
+                    },
+                ),
             },
             "required": {
-                "prompt": ("STRING", {  # 必选：要保存的文本内容
-                    "default": "",
-                    "multiline": True  # 支持多行文本
-                }),
+                "prompt": (
+                    "STRING",  # 必选：要保存的文本内容
+                    {
+                        "default": "",
+                        "multiline": True,  # 支持多行文本
+                    },
+                ),
             },
         }
 
@@ -177,13 +187,15 @@ class SaveImagePrompt:
         # 输出：保存的内容 + 实际使用的缓存键（方便调试）
         return (prompt, cache_key)
 
+
 NODE_CLASS_MAPPINGS = {
     "LoadImagePrompt": LoadImagePrompt,
-    "SaveImagePrompt": SaveImagePrompt
+    "SaveImagePrompt": SaveImagePrompt,
 }
 
 # 节点显示名称
 NODE_DISPLAY_NAME_MAPPINGS = {
     "LoadImagePrompt": "NNKK:LoadImagePrompt",
-    "SaveImagePrompt": "NNKK:SaveImagePrompt"
+    "SaveImagePrompt": "NNKK:SaveImagePrompt",
 }
+
