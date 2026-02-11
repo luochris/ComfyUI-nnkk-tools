@@ -3,7 +3,7 @@ import torch
 from PIL import Image, ImageDraw, ImageFont
 
 
-class NKK_Watermark:
+class Watermark:
     """
     在图片右下角添加文字水印的节点。
     支持批量图片，保持与输入相同的Tensor格式（IMAGE）。
@@ -174,10 +174,10 @@ class NKK_Watermark:
 
 
 NODE_CLASS_MAPPINGS = {
-    "NKK_Watermark": NKK_Watermark,
+    "Watermark": Watermark,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "NKK_Watermark": "NNKK:Watermark",
+    "Watermark": "NNKK:Watermark",
 }
 
